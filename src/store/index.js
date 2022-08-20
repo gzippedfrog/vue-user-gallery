@@ -8,9 +8,11 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     users: [],
+    userPosts: [],
   },
   getters: {
     getUsers: (state) => state.users,
+    getUserPosts: (state) => state.userPosts,
   },
   actions: {
     fetchUsers({ commit }) {
@@ -23,6 +25,9 @@ export default new Vuex.Store({
   mutations: {
     SET_USERS(state, users) {
       state.users = users;
+    },
+    SET_USER_POSTS(state, userPosts) {
+      state.userPosts = userPosts;
     },
   },
 });

@@ -1,17 +1,12 @@
 <template>
   <div id="app">
-    <UserList />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import UserList from "./components/UserList.vue";
-
 export default {
   name: "App",
-  components: {
-    UserList,
-  },
 };
 </script>
 
@@ -20,6 +15,11 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  margin-top: 60px;
+  min-height: 100%;
+  background-color: #333;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  padding-top: 10px;
 }
 </style>
