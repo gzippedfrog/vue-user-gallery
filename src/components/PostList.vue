@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Posts</h2>
+    <h2 @click="createLink"></h2>
     <ul class="posts">
       <li class="post" v-for="post in posts" :key="post.id">
         <div class="title">{{ post.title }}</div>
@@ -23,6 +23,10 @@ export default {
     };
   },
   methods: {
+    createLink() {
+      const link = this.$route.fullPath;
+      this.$store.commit("ADD_LINK", `${link}/posts`);
+    },
     async fetchPosts() {
       this.postsLoading = true;
       return fetch(`${endpoint}/users/${this.userId}/posts?_limit=2`)
@@ -38,12 +42,25 @@ export default {
   },
   async mounted() {
     await this.fetchPosts();
-    console.log(this.$route.params);
   },
 };
 </script>
 
 <style scoped>
+h2 {
+  text-align: center;
+}
+
+h2::after {
+  content: "Posts";
+}
+
+h2:hover::after {
+  content: "add link";
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .posts {
   list-style: none;
   padding: 0;
@@ -53,8 +70,9 @@ export default {
 .post {
   border: solid #ccc 1px;
   border-radius: 5px;
-  margin: 20px 0;
   padding: 10px;
+  margin-bottom: 20px;
+  text-align: justify;
 }
 
 .title {
@@ -65,9 +83,5 @@ export default {
 .title::first-letter,
 .body::first-letter {
   text-transform: capitalize;
-}
-
-h2 {
-  text-align: center;
 }
 </style>

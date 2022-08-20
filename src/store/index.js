@@ -8,15 +8,15 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     users: [],
-    userPosts: [],
+    links: ["/user/1/albums", "/user/2/posts"],
   },
   getters: {
     getUsers: (state) => state.users,
-    getUserPosts: (state) => state.userPosts,
+    getLinks: (state) => state.links,
   },
   actions: {
     fetchUsers({ commit }) {
-      fetch(`${endpoint}/users`)
+      return fetch(`${endpoint}/users`)
         .then((res) => res.json())
         .then((data) => commit("SET_USERS", data))
         .catch(console.log);
@@ -26,8 +26,10 @@ export default new Vuex.Store({
     SET_USERS(state, users) {
       state.users = users;
     },
-    SET_USER_POSTS(state, userPosts) {
-      state.userPosts = userPosts;
+    ADD_LINK(state, link) {
+      if (["albums", "posts"].includes(link.split("/").at(-2))) return;
+      if (state.links.includes(link)) return;
+      state.links.push(link);
     },
   },
 });

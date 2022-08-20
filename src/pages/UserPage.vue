@@ -1,21 +1,19 @@
 <template>
   <div>
-    <a @click="$router.go(-1)" class="go-back">GO BACK</a>
+    <!-- <a @click="$router.go(-1)" class="go-back">GO BACK</a> -->
 
-    <div class="container">
-      <AlbumList />
-      <PostList />
-    </div>
+    <AlbumList />
+    <PostList />
   </div>
 </template>
 
 <script>
-import PostList from "../components/PostList.vue";
-import AlbumList from "../components/AlbumList.vue";
+import AlbumList from "../components/AlbumList";
+import PostList from "../components/PostList";
 
 export default {
   name: "UserPage",
-  components: { PostList, AlbumList },
+  components: { AlbumList, PostList },
 };
 </script>
 
@@ -27,10 +25,8 @@ export default {
   cursor: pointer;
 }
 
-.container {
-  width: 500px;
-  min-height: 100%;
+/* .container {
   display: flex;
   flex-direction: column;
-}
+} */
 </style>

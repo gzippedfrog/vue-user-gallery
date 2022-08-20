@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h2>Albums</h2>
-    <div class="album" v-for="album in Object.values(albums)" :key="album.id">
-      <h3 class="title">{{ album.title }}</h3>
+    <h2 @click="createLink"></h2>
+    <div v-for="album in albums" :key="album.id">
+      <h3>{{ album.title }}</h3>
       <Carousel :perPage="3" :paginationEnabled="false">
         <Slide v-for="photo in album.photos" :key="photo">
           <img :src="photo" />
@@ -18,7 +18,7 @@ import { Carousel, Slide } from "vue-carousel";
 const endpoint = "https://jsonplaceholder.typicode.com";
 
 export default {
-  name: "AlbumList",
+  name: "AlbumsList",
   components: {
     Carousel,
     Slide,
@@ -26,11 +26,15 @@ export default {
   data() {
     return {
       userId: this.$route.params.id,
-      albums: {},
+      albums: [],
       loading: false,
     };
   },
   methods: {
+    createLink() {
+      const link = this.$route.fullPath;
+      this.$store.commit("ADD_LINK", `${link}/albums`);
+    },
     async fetchPhotos(albumId) {
       return fetch(`${endpoint}/albums/${albumId}/photos?_limit=5`)
         .then((res) => res.json())
@@ -44,7 +48,7 @@ export default {
         .then(async (albums) => {
           for (const album of albums) {
             const photos = await this.fetchPhotos(album.id);
-            this.$set(this.albums, album.id, { title: album.title, photos });
+            this.albums.push({ id: album.id, title: album.title, photos });
           }
         })
         .catch(console.log)
@@ -62,5 +66,15 @@ export default {
 <style scoped>
 h2 {
   text-align: center;
+}
+
+h2::after {
+  content: "Albums";
+}
+
+h2:hover::after {
+  content: "add link";
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>
