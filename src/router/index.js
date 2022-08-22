@@ -1,8 +1,12 @@
+import Vue from "vue";
 import VueRouter from "vue-router";
+
 import UserListPage from "../pages/UserListPage";
 import UserPage from "../pages/UserPage";
 import AlbumList from "../components/AlbumList";
 import PostList from "../components/PostList";
+
+Vue.use(VueRouter);
 
 export default new VueRouter({
   mode: "history",

@@ -1,74 +1,47 @@
 <template>
   <div id="app">
-    <router-link to="/" tag="h2">Return to home</router-link>
-    <router-view class="left"></router-view>
-    <div class="right">
-      <h2>Custom Links</h2>
-      <ul class="links">
-        <li v-for="link in links" :key="link">
-          <router-link :to="link">
-            {{ link }}
-          </router-link>
-        </li>
-      </ul>
-    </div>
+    <main>
+      <router-view></router-view>
+    </main>
+    <aside>
+      <LinkList />
+    </aside>
   </div>
 </template>
 
 <script>
+import LinkList from "./components/LinkList";
+
 export default {
   name: "App",
-  computed: {
-    links() {
-      return this.$store.getters.getLinks;
-    },
-  },
+  components: { LinkList },
   mounted() {
     this.$store.dispatch("fetchUsers");
   },
 };
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-height: 100%;
-  max-width: 1000px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr;
-  /* justify-content: center; */
-  column-gap: 20px;
-  padding: 0 20px;
+  position: relative;
+  max-width: 900px;
   margin: auto;
+  padding: 20px;
+  display: flex;
+  gap: 20px;
 }
 
-.links {
-  height: 290px;
-  border: solid #ccc 1px;
-  border-radius: 5px;
-  list-style: none;
-  margin: 0;
-  padding: 15px;
+main {
+  flex-grow: 1;
 }
 
-.left,
-.right {
-  min-width: 0;
-}
-
-li {
-  margin-bottom: 10px;
-}
-
-a {
-  color: inherit;
-}
-
-h2 {
-  cursor: pointer;
-  grid-column: 1/3;
+@media screen and (max-width: 768px) {
+  #app {
+    flex-direction: column-reverse;
+    max-width: 500px;
+  }
 }
 </style>

@@ -1,16 +1,20 @@
 <template>
   <div>
     <h2>Users</h2>
-    <ul class="users">
+    <ul class="list-unstyled">
       <router-link
-        class="user"
         v-for="user in users"
         :key="user.id"
         :to="`/user/${user.id}`"
         tag="li"
+        role="button"
       >
-        <div>{{ user.name }}</div>
-        <div class="username">{{ user.username }}</div>
+        <b-card class="mt-3">
+          <b-card-text>
+            <div>{{ user.name }}</div>
+            <div class="text-primary">@{{ user.username }}</div>
+          </b-card-text>
+        </b-card>
       </router-link>
     </ul>
   </div>
@@ -21,32 +25,8 @@ export default {
   name: "UserListPage",
   computed: {
     users() {
-      return this.$store.getters.getUsers;
+      return this.$store.state.users;
     },
   },
 };
 </script>
-
-<style scoped>
-.users {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.user {
-  border: solid #ccc 1px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  padding: 10px;
-  cursor: pointer;
-}
-
-.username {
-  color: mediumpurple;
-}
-
-.username::before {
-  content: "@";
-}
-</style>

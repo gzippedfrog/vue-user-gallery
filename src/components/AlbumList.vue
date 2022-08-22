@@ -1,11 +1,22 @@
 <template>
-  <div>
-    <h2 @click="createLink"></h2>
-    <div v-for="album in albums" :key="album.id">
-      <h3>{{ album.title }}</h3>
-      <Carousel :perPage="3" :paginationEnabled="false">
-        <Slide v-for="photo in album.photos" :key="photo">
-          <img :src="photo" />
+  <b-spinner
+    v-if="loading"
+    class="mt-5 d-block mx-auto"
+    variant="primary"
+  ></b-spinner>
+
+  <div v-else>
+    <div v-for="album in albums" :key="album.id" class="mt-3 album-container">
+      <h5>{{ album.title }}</h5>
+      <Carousel
+        :paginationEnabled="false"
+        :perPageCustom="[
+          [0, 2],
+          [480, 3],
+        ]"
+      >
+        <Slide v-for="photoUrl in album.photoUrls" :key="photoUrl">
+          <img :src="photoUrl" />
         </Slide>
       </Carousel>
     </div>
@@ -25,16 +36,11 @@ export default {
   },
   data() {
     return {
-      userId: this.$route.params.id,
       albums: [],
       loading: false,
     };
   },
   methods: {
-    createLink() {
-      const link = this.$route.fullPath;
-      this.$store.commit("ADD_LINK", `${link}/albums`);
-    },
     async fetchPhotos(albumId) {
       return fetch(`${endpoint}/albums/${albumId}/photos?_limit=5`)
         .then((res) => res.json())
@@ -42,13 +48,15 @@ export default {
         .catch(console.log);
     },
     async fetchAlbums() {
+      const userId = this.$route.params.id;
       this.loading = true;
-      return fetch(`${endpoint}/users/${this.userId}/albums?_limit=2`)
+
+      return fetch(`${endpoint}/users/${userId}/albums`)
         .then((res) => res.json())
         .then(async (albums) => {
           for (const album of albums) {
-            const photos = await this.fetchPhotos(album.id);
-            this.albums.push({ id: album.id, title: album.title, photos });
+            album.photoUrls = await this.fetchPhotos(album.id);
+            this.albums.push(album);
           }
         })
         .catch(console.log)
@@ -64,17 +72,7 @@ export default {
 </script>
 
 <style scoped>
-h2 {
-  text-align: center;
-}
-
-h2::after {
-  content: "Albums";
-}
-
-h2:hover::after {
-  content: "add link";
-  text-decoration: underline;
-  cursor: pointer;
+.album-container {
+  max-width: 500px;
 }
 </style>

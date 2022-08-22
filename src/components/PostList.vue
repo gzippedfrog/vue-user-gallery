@@ -1,12 +1,22 @@
 <template>
-  <div>
-    <h2 @click="createLink"></h2>
-    <ul class="posts">
-      <li class="post" v-for="post in posts" :key="post.id">
-        <div class="title">{{ post.title }}</div>
-        <div class="body">{{ post.body }}</div>
-      </li>
-    </ul>
+  <b-spinner
+    v-if="loading"
+    class="mt-5 d-block mx-auto"
+    variant="primary"
+  ></b-spinner>
+
+  <div v-else>
+    <b-card
+      v-for="post in posts"
+      :title="post.title"
+      tag="li"
+      class="mt-3"
+      :key="post.id"
+    >
+      <b-card-text>
+        {{ post.body }}
+      </b-card-text>
+    </b-card>
   </div>
 </template>
 
@@ -17,26 +27,28 @@ export default {
   name: "PostList",
   data() {
     return {
-      userId: this.$route.params.id,
       posts: [],
-      postsLoading: false,
+      loading: false,
     };
   },
-  methods: {
-    createLink() {
-      const link = this.$route.fullPath;
-      this.$store.commit("ADD_LINK", `${link}/posts`);
+  computed: {
+    links() {
+      return this.$store.state.links;
     },
+  },
+  methods: {
     async fetchPosts() {
-      this.postsLoading = true;
-      return fetch(`${endpoint}/users/${this.userId}/posts?_limit=2`)
+      const userId = this.$route.params.id;
+      this.loading = true;
+
+      return fetch(`${endpoint}/users/${userId}/posts`)
         .then((res) => res.json())
         .then((data) => {
           this.posts = data;
         })
         .catch(console.log)
         .finally(() => {
-          this.postsLoading = false;
+          this.loading = false;
         });
     },
   },
@@ -45,43 +57,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-h2 {
-  text-align: center;
-}
-
-h2::after {
-  content: "Posts";
-}
-
-h2:hover::after {
-  content: "add link";
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.posts {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.post {
-  border: solid #ccc 1px;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 20px;
-  text-align: justify;
-}
-
-.title {
-  margin-bottom: 15px;
-  font-weight: bold;
-}
-
-.title::first-letter,
-.body::first-letter {
-  text-transform: capitalize;
-}
-</style>

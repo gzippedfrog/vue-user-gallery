@@ -8,11 +8,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     users: [],
-    links: ["/user/1/albums", "/user/2/posts"],
-  },
-  getters: {
-    getUsers: (state) => state.users,
-    getLinks: (state) => state.links,
+    links: ["/user/5/albums", "/user/6/posts", "/user/7/posts"],
   },
   actions: {
     fetchUsers({ commit }) {
@@ -27,8 +23,6 @@ export default new Vuex.Store({
       state.users = users;
     },
     ADD_LINK(state, link) {
-      if (["albums", "posts"].includes(link.split("/").at(-2))) return;
-      if (state.links.includes(link)) return;
       state.links.push(link);
     },
   },
