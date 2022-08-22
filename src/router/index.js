@@ -9,7 +9,7 @@ import PostList from "../components/PostList";
 Vue.use(VueRouter);
 
 export default new VueRouter({
-  mode: "history",
+  // mode: "history",
   routes: [
     { path: "/", component: UserListPage },
     { path: "/user/:id", component: UserPage },
